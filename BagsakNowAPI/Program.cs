@@ -1,16 +1,28 @@
 using Microsoft.EntityFrameworkCore;
 using BagsakNowAPI.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Register the Controllers
+// Add services to the container.
 builder.Services.AddControllers();
-// Register the Database Context with the SQL Server connection string
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+// Database Context
 builder.Services.AddDbContext<BagsakContext>(options =>
-options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 var app = builder.Build();
-// Port configuration for hosting platforms like Render
-// Comment this out when testing locally, uncomment before deploying
- var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
- app.Urls.Add($"http://+:{port}");
+
+// Enable Swagger on Render
+app.UseSwagger();
+app.UseSwaggerUI(c => {
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "BagsakNowAPI v1");
+    c.RoutePrefix = string.Empty; // Set Swagger as the default landing page
+});
+
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+app.Urls.Add($"http://*:{port}");
+
 app.MapControllers();
 app.Run();
