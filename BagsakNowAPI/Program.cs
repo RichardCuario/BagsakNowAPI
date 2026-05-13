@@ -1,29 +1,30 @@
 using Microsoft.EntityFrameworkCore;
 using BagsakNowAPI.Models;
-using Microsoft.OpenApi.Models; // Essential for Swagger
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // 1. Add services to the container.
 builder.Services.AddControllers();
 
-// 2. Register Swagger services (Fixes the CS1061 build errors)
+// 2. Register Swagger services
+// Note: Requires Swashbuckle.AspNetCore NuGet package
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// 3. Restore your Database Context (Crucial for your API to actually work)
+// 3. Register Database Context
 builder.Services.AddDbContext<BagsakContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 
 // 4. Configure the HTTP request pipeline.
-// This ensures Swagger is available on Render (Production)
+// This enables Swagger in both Development and Production (Render)
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "BagsakNowAPI v1");
-    c.RoutePrefix = string.Empty; // Makes Swagger the landing page (Fixes 404)
+    c.RoutePrefix = string.Empty; // This makes Swagger the landing page
 });
 
 // 5. Port configuration for Render
@@ -32,8 +33,8 @@ app.Urls.Add($"http://0.0.0.0:{port}");
 
 app.UseHttpsRedirection();
 
-// 6. Custom Root Route (Optional: confirms the app is running)
-app.MapGet("/", () => "BagsakNowAPI is running 🚀 Members are: Richard Cuario, Jhoyet Laygo, Bryan Buella, Chrisjerico Lucañas, Mikail Catli and John Carl Consorte");
+// 6. Root Route confirmation
+app.MapGet("/status", () => "BagsakNowAPI is running 🚀");
 
 app.MapControllers();
 
