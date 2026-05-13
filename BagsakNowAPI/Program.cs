@@ -20,14 +20,7 @@ app.UseSwaggerUI();
 app.UseHttpsRedirection();
 
 // ⭐ ADD ROOT ROUTE (THIS FIXES YOUR 404)
-app.MapGet("/", () => "BagsakNowAPI is running 🚀 ('Richard Cuario', 'richardcuario6363@gmail.com', 'chad123', 'Leader', 1),
-('Jhoyet Laygo', 'jhoyetlaygo@gmail.com', 'jhoyet123', 'Assitant',1),
-('Bryan Buella', 'bryanbuella@gmail.com', 'bryan123', 'Member', 1),
-('Chrisjerico Lucañas', 'jericochris@gmail.com', 'chris123', 'Member', 1),
-('Mikail Catli', 'catlimikail@gmail.com', 'catli123', 'Member', 0);
-('John Carl Consorte', 'carl1568.gmail.com', 'carl123', 'Member', 0);
--- Verify the data
-");
+app.MapGet("/", () => "BagsakNowAPI is running 🚀 Members are : Richard Cuario, Jhoyet Laygo, Bryan Buella, Chrisjerico Lucañas, Mikail Catli and John Carl Consorte");
 
 // Controllers
 app.MapControllers();
